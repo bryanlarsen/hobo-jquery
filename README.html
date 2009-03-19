@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN"
+    "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
+<html xmlns:svg='http://www.w3.org/2000/svg' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+<head><meta content='application/xhtml+xml;charset=utf-8' http-equiv='Content-type' /><title>Hobo JQuery</title></head>
+<body>
+<h1 id='hobo_jquery'>Hobo JQuery</h1>
+
+<p>This is a simple Rails plugin that works with <a href='http://hobocentral.net'>Hobo</a>.</p>
+
+<p>It adds a bunch of tags to Hobo that instantiate various <a href='http://jqueryui.com'>JQuery UI</a> widgets.</p>
+
+<h2 id='installing'>Installing</h2>
+
+<p>Install with</p>
+
+<pre><code>ruby script/plugin install git://github.com/bryanlarsen/hobo-jquery.git</code></pre>
+
+<p>Link jQuery, jQuery-UI, and hobo-jQuery assets into your public directory:</p>
+
+<pre><code>rake hobo_jquery:link_jquery
+rake hobo_jquery:link_assets</code></pre>
+
+<p>If you&#8217;re on Windows, you can use the update_jquery and update_assets tasks instead.</p>
+
+<p>To use, you need to include hobo-jquery and add the assets to your page. In your application.dryml:</p>
+
+<pre><code>&lt;include src=&quot;hobo-jquery&quot; plugin=&quot;hobo-jquery&quot; /&gt;
+
+&lt;extend tag=&quot;page&quot;&gt;
+  &lt;old-page merge&gt;
+    &lt;custom-scripts:&gt;
+      &lt;hjq-assets/&gt;
+    &lt;/custom-scripts&gt;
+  &lt;/old-page&gt;
+&lt;/extend&gt;</code></pre>
+
+<h2 id='documentation'>Documentation</h2>
+
+<p><a href='http://bryanlarsen.github.com/hobo-jquery/documentation.html'>Auto generated documentation</a>.</p>
+</body></html>
