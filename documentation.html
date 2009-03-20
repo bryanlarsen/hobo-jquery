@@ -70,6 +70,26 @@
             
               
   <li>
+    <a href="#jquery-assets-tag">
+      <span>
+        jquery-assets
+      </span>
+    </a>
+  </li>
+
+            
+              
+  <li>
+    <a href="#hobo-jquery-assets-tag">
+      <span>
+        hobo-jquery-assets
+      </span>
+    </a>
+  </li>
+
+            
+              
+  <li>
     <a href="#hjq-datepicker-tag">
       <span>
         hjq-datepicker
@@ -106,7 +126,7 @@
               
               <p>This is Hobo jQuery&#8217;s standard tag annotation method. This annotation is automatically added to Hobo jQuery tags, but you may wish to use it in your own tag definitions.</p>
 
-<p>The current implementation uses HTML comments for annotation. This may change in the future, if somebody can suggest a better mechanism. <a href='http://www.1729.com/blog/HtmlAnnotations.html'>Here is a good discussion of the alternatives.</a></p>
+<p>The current implementation uses HTML comments for annotation. This may change in the future, if somebody can suggest a better mechanism. <a href='http://www.1729.com/blog/HtmlAnnotations.html'>Here is a good discussion of the alternatives.</a>. Two more possibilities are http://www.w3.org/TR/xhtml-rdfa-primer and http://ejohn.org/blog/html-5-data-attributes/.</p>
 
 <p>To use it, invoke this tag directly before the tag to annotate. To get the annotations, call hjq.getAnnotations with <em>this</em> set to the element that has been annotated. For example:</p>
 
@@ -139,7 +159,7 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
           
               <h2>hjq-assets</h2>
               
-              <p>These are the Hobo jQuery assets required by Hobo jQuery. You will probably wish to add this to your page definition:</p>
+              <p>These are the Hobo jQuery and jQuery assets required by Hobo jQuery. You will probably wish to add this to your page definition:</p>
 
 <pre><code>&lt;extend tag=&quot;page&quot;&gt;
   &lt;old-page merge&gt;
@@ -156,8 +176,48 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
               <div class="source">
                 <h3><a href="#">Source</a></h3>
                 <pre><code>&lt;def tag='hjq-assets'&gt;
+  &lt;jquery-assets/&gt;
+  &lt;hobo-jquery-assets/&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="jquery-assets-tag">
+          
+              <h2>jquery-assets</h2>
+              
+              
+          
+              
+          
+              
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def tag='jquery-assets'&gt;
+  &lt;stylesheet name='smoothness/jquery-ui-1.7.custom.css'/&gt;
   &lt;javascript name='jquery-1.3.2.min.js'/&gt;
   &lt;javascript name='jquery-ui-1.7.custom.min.js'/&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="hobo-jquery-assets-tag">
+          
+              <h2>hobo-jquery-assets</h2>
+              
+              
+          
+              
+          
+              
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def tag='hobo-jquery-assets'&gt;
+  &lt;stylesheet name='hobo-jquery.css'/&gt;
   &lt;javascript name='hobo-jquery.js'/&gt;
   &lt;script type='text/javascript'&gt;
     jQuery.noConflict();
@@ -165,8 +225,6 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
       hjq.initialize.call(document);
     });
   &lt;/script&gt;
-  &lt;stylesheet name='smoothness/jquery-ui-1.7.custom.css'/&gt;
-  &lt;stylesheet name='hobo-jquery.css'/&gt;
 &lt;/def&gt;</code></pre>
               </div>
           
@@ -234,7 +292,9 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
 <p>It also fixes the following buglets in input-many:</p>
 
 <ul>
-<li>id&#8217;s of textareas and selects are adjusted properly</li>
+<li>id&#8217;s of textareas and selects and other non-input&#8217;s are adjusted properly</li>
+
+<li>classdata for inner elements updated</li>
 
 <li>the original input-many didn&#8217;t clear textareas and select&#8217;s. We don&#8217;t have a clear -&gt; no buglet! :)</li>
 </ul>
@@ -270,6 +330,12 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
 
       </li>
     
+      <li>remove-item
+        
+  
+
+      </li>
+    
       <li>add-item
         
   
@@ -277,6 +343,12 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
       </li>
     
       <li>item
+        
+  
+
+      </li>
+    
+      <li>remove-item
         
   
 
@@ -353,43 +425,55 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
               <div class="source">
                 <h3><a href="#">Source</a></h3>
                 <pre><code>&lt;def attrs='minimum, fields, new-template, remove-hook' polymorphic tag='hjq-input-many'&gt;
+&lt;%
+# helper function to create id's on buttons to facilitate testing
+def underize(s)
+  s.gsub(/\[/,&quot;_&quot;).gsub(/\]/,&quot;&quot;)
+end
+%&gt;
   &lt;set empty='&amp;this.empty?'/&gt;
   &lt;annotate-tag tag='hjq-input-many' merge-attrs='minimum, add-hook, remove-hook' init='hjq.input_many.init'/&gt;
   &lt;ul class='hjq-input-many #{this_field.dasherize} #{css_data :input_many_prefix, param_name_for_this} hjq-annotated'&gt;
     &lt;% template ||= this.try.new_candidate || this.member_class.new %&gt;
     &lt;% minimum ||= 0 ; minimum = minimum.to_i %&gt;
-    &lt;li class='input-many-template'&gt;
+    &lt;fake-field-context fake-field='-1' context='&amp;template'&gt;
+      &lt;li class='input-many-template' id='#{param_name_for_this}'&gt;
+        &lt;hjq-input-many-item param='item' merge-attrs='fields'/&gt;
+        &lt;div class='buttons'&gt;
+          &lt;button param='remove-item' id='#{underize param_name_for_this}_remove'&gt;-&lt;/button&gt;
+          &lt;button param='add-item' id='#{underize param_name_for_this}_add'&gt;+&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/fake-field-context&gt;
+    &lt;li class='empty #{&amp;apos;hidden&amp;apos; unless this.empty? and minimum==0}' id='#{param_name_for_this}[-1]_empty'&gt;
+      &lt;!-- HACK way to signal an empty collection to the controller --&gt;
+      &lt;input name='#{param_name_for_this}' class='empty-input' id='#{param_name_for_this}' type='hidden' value='' disabled='&amp;(!this.empty? || minimum&gt;0)'/&gt;
       &lt;fake-field-context fake-field='-1' context='&amp;template'&gt;
+        &lt;div param='empty-message'&gt;
+          No &lt;%= this.class.class_name.humanize.downcase.pluralize %&gt;.
+        &lt;/div&gt;
+        &lt;div class='buttons'&gt;
+          &lt;button class='hidden' param='remove-item' id='#{underize param_name_for_this}_remove'&gt;-&lt;/button&gt;
+          &lt;button param='add-item' id='#{underize param_name_for_this}_add'&gt;+&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/fake-field-context&gt;      
+    &lt;/li&gt;
+    &lt;fake-field-context fake-field='0' context='&amp;template'&gt;
+      &lt;li id='#{param_name_for_this}' if='&amp;(this_parent.empty? &amp;&amp; minimum&gt;0)'&gt;
         &lt;hjq-input-many-item param='item' merge-attrs='fields'/&gt;
-      &lt;/fake-field-context&gt;
-      &lt;div class='buttons'&gt;
-        &lt;button param='remove-item'&gt;-&lt;/button&gt;
-        &lt;button param='add-item'&gt;+&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/li&gt;
-    &lt;li class='empty #{&amp;apos;hidden&amp;apos; unless this.empty? and minimum==0}'&gt;
-      &lt;div param='empty-message'&gt;
-        No &lt;%= this_field.pluralize %&gt;.
-      &lt;/div&gt;
-      &lt;div class='buttons'&gt;
-        &lt;button param='add-item'&gt;+&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/li&gt;
-    &lt;li if='&amp;(this.empty? &amp;&amp; minimum&gt;0)'&gt;
-      &lt;fake-field-context fake-field='0' context='&amp;template'&gt;
-        &lt;hjq-input-many-item param='item' merge-attrs='fields'/&gt;
-      &lt;/fake-field-context&gt;
-      &lt;div class='buttons'&gt;
-        &lt;button param='add-item'&gt;+&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/li&gt;
-    &lt;li class='#{&amp;apos;record-with-errors&amp;apos; unless this.errors.empty?}' repeat&gt;
+        &lt;div class='buttons'&gt;
+          &lt;button class='hidden' param='remove-item' id='#{underize param_name_for_this}_remove'&gt;-&lt;/button&gt;
+          &lt;button param='add-item' id='#{underize param_name_for_this}_add'&gt;+&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/fake-field-context&gt;       
+    &lt;li class='#{&amp;apos;record-with-errors&amp;apos; unless this.errors.empty?}' repeat id='#{param_name_for_this}'&gt;
       &lt;error-messages class='sub-record' without-heading/&gt;
       &lt;hidden-id-field/&gt;
       &lt;hjq-input-many-item param='item' merge-attrs='fields'/&gt;
       &lt;div class='buttons'&gt;
-        &lt;button param='remove-item'&gt;-&lt;/button&gt;
-        &lt;button param='add-item' if='&amp;last_item?'&gt;+&lt;/button&gt;
+        &lt;button class='#{&amp;apos;hidden&amp;apos; if this_parent.length&lt;=minimum}' param='remove-item' id='#{underize param_name_for_this}_remove'&gt;-&lt;/button&gt;
+        &lt;button class='#{&amp;apos;hidden&amp;apos; if not last_item?}' param='add-item' id='#{underize param_name_for_this}_add'&gt;+&lt;/button&gt;
       &lt;/div&gt;
     &lt;/li&gt;
   &lt;/ul&gt;
