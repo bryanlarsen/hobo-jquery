@@ -118,6 +118,26 @@
   </li>
 
             
+              
+  <li>
+    <a href="#formlet-tag">
+      <span>
+        formlet
+      </span>
+    </a>
+  </li>
+
+            
+              
+  <li>
+    <a href="#formlet-submit-tag">
+      <span>
+        formlet-submit
+      </span>
+    </a>
+  </li>
+
+            
           </ul>
           
             <div id="annotate-tag-tag">
@@ -199,6 +219,7 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
   &lt;stylesheet name='smoothness/jquery-ui-1.7.custom.css'/&gt;
   &lt;javascript name='jquery-1.3.2.min.js'/&gt;
   &lt;javascript name='jquery-ui-1.7.custom.min.js'/&gt;
+  &lt;javascript name='jquery.form.js'/&gt;
 &lt;/def&gt;</code></pre>
               </div>
           
@@ -280,7 +301,7 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
 
 <li>it allows the (+) and (-) buttons to be customized</li>
 
-<li>it provides a default for then <code>item</code> parameter</li>
+<li>it provides a default for the <code>item</code> parameter</li>
 
 <li>it copies from a template rather than cloning the current item and clearing it</li>
 
@@ -391,6 +412,8 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
 <p>You&#8217;ll often want to provide the <code>item</code> parameter:</p>
 
 <pre><code>&lt;hjq-input-many:products&gt;&lt;item:&gt;&lt;field-list fields=&quot;name, price&quot; /&gt;&lt;/item:&gt;&lt;/hjq-input-many&gt;</code></pre>
+
+<p>A fully worked up example of nested hjq-input-many&#8217;s may be found in <a href='http://github.com/tablatom/agility/blob/jquery-test/app/views/projects/nested_has_many_test.dryml'>agility/jquery-test</a></p>
 
 <h3 id='attributes'>Attributes</h3>
 
@@ -512,6 +535,206 @@ end
     &lt;header: replace/&gt;
     &lt;body:&gt;&lt;field-list merge-attrs='fields'/&gt;&lt;/body:&gt;
   &lt;/card&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="formlet-tag">
+          
+              <h2>formlet</h2>
+              
+              <p><code>&lt;formlet&gt;</code> works like an AJAX <code>&lt;form&gt;</code> without actually being an AJAX <code>&lt;form&gt;</code>. This is usefully in scenarios where forms aren&#8217;t allowed or are problematic, like inside of another form.</p>
+          
+              
+          
+              <h3 id='attributes'>Attributes</h3>
+
+<ul>
+<li>
+<p>standard Hobo HTML attributes (id, part, et cetera). All supported.</p>
+</li>
+
+<li>
+<p>standard Hobo AJAX attributes: (see http://cookbook.hobocentral.net/api<em>taglibs/rapid</em>forms)</p>
+
+<ul>
+<li>
+<p>update: (optional). The DOM ID&#8217;s of parts to update. Note that you get an AJAX formlet whether this is provided or not.</p>
+</li>
+
+<li>
+<p>message: the spinner message</p>
+</li>
+
+<li>
+<p>spinner<em>next</em>to: DOM id of an element to position the ajax progress spinner next to.</p>
+</li>
+
+<li>
+<p>before, success, error, complete: These callbacks are slightly different from the standard form callbacks. They are called with &#8220;this&#8221; set to the formlet. Also, you may pass in a function name rather than a javascript fragment. If the before callback returns false, it will cancel the submission.</p>
+</li>
+
+<li>
+<p>confirm: a message to be displayed in a JavaScript confirm dialog. By default there is no confirm dialog</p>
+</li>
+
+<li>
+<p>not supported: type, script, form, params, confirm, reset<em>form, refocus</em>form, result<em>update. None of these are particularly hard to support. Email or post a message to the list if you need them.</em></p>
+</li>
+</ul>
+</li>
+
+<li>
+<p>standard Hobo Form attributes (all supported):</p>
+
+<ul>
+<li>
+<p>hidden-fields</p>
+</li>
+
+<li>
+<p>action</p>
+</li>
+
+<li>
+<p>method</p>
+</li>
+
+<li>
+<p>web-method</p>
+</li>
+
+<li>
+<p>lifecycle</p>
+</li>
+
+<li>
+<p>owner</p>
+</li>
+</ul>
+</li>
+</ul>
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def polymorphic attrs='update, hidden-fields, action, method, web-method, lifecycle, owner' tag='formlet'&gt;
+&lt;%
+#FIXME: code very similar to &lt;form&gt;.  refactor out common code.
+
+  ajax_attrs, html_attrs = attributes.partition_hash(Hobo::RapidHelper::AJAX_ATTRS)
+
+  ajax_options = {}
+
+  new_record = this.try.new_record?
+
+  method = if method.nil?
+             (action || web_method || new_record) ? &quot;post&quot; : &quot;put&quot;
+           else
+             method.downcase
+           end
+
+  ajax_options[:url] ||= begin
+     target = if owner
+                collection_name = this.class.reverse_reflection(owner).name
+                this.send(owner).send(collection_name)
+              else
+                this
+              end
+     action = web_method || lifecycle
+     object_url(target, action, :method =&gt; &quot;post&quot;)
+  end
+
+  if action.nil? &amp;&amp; (ajax_options[:url].nil? ||
+                     (lifecycle.nil? &amp;&amp; new_record &amp;&amp; !this.creatable_by?(current_user)) ||
+                     (lifecycle.nil? &amp;&amp; !new_record &amp;&amp; !can_edit?))
+    Hobo::Dryml.last_if = false
+    logger.info(&quot;blank!!!&quot;)
+    &quot;&quot;
+  else
+    if method == &quot;put&quot;
+      # browsers don't support put -- use post and add the Rails _method hack
+      http_method_hidden = hidden_field_tag(&quot;_method&quot;, &quot;PUT&quot;) 
+      ajax_options[:type] = &quot;post&quot;
+    else
+      ajax_options[:type] = method
+    end
+
+    ajax_attrs[:update] = if update 
+                            update.split(/,\s*/) 
+                          else
+                            []
+                          end
+
+    hiddens = nil
+    body = with_form_context do
+      # It is important to evaluate parameters.default first, in order to populate scope.form_field_names
+      b = parameters.default
+      hiddens = self.hidden_fields(:fields =&gt; hidden_fields) if new_record
+      b
+    end
+
+    auth_token = if method.nil? || method == 'get' || !protect_against_forgery?
+                   ''
+                 else
+                   element(:input, {:type =&gt; &quot;hidden&quot;, 
+                           :name =&gt; request_forgery_protection_token.to_s,
+                           :value =&gt; form_authenticity_token}, nil, true, true)
+                 end
+     
+    unless method == &quot;get&quot;
+      page_path = if (request.post? || request.put?) &amp;&amp; params[:page_path]
+                    params[:page_path]
+                  else
+                    view_name.sub(Hobo::Dryml::EMPTY_PAGE, params[:action])
+                  end
+      page_path_hidden = hidden_field_tag(&quot;page_path&quot;, page_path) 
+    end
+
+    hiddens_div = element(:div, {:class =&gt; &quot;hidden-fields&quot;}, [http_method_hidden, page_path_hidden, auth_token, hiddens].join)
+     
+    body = [hiddens_div, body].join
+
+    if action.nil? # don't add automatic css classes if the action was specified
+      if web_method
+        add_classes!(html_attrs, &quot;#{type_id.dasherize}-#{web_method}-form&quot;)
+      else
+        add_classes!(html_attrs, &quot;#{'new ' if new_record}#{type_id.dasherize}&quot;)
+      end
+    end
+
+    Hobo::Dryml.last_if = true
+  end
+
+  add_classes!(html_attrs, &quot;formlet&quot;)
+%&gt;
+&lt;annotate-tag ajax-attrs='&amp;ajax_attrs' tag='formlet' ajax-options='&amp;ajax_options'/&gt;
+  &lt;%= element(&quot;div&quot;, html_attrs, body) %&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="formlet-submit-tag">
+          
+              <h2>formlet-submit</h2>
+              
+              <p>Submit button for use with <code>&lt;formlet&gt;</code>. Submit won&#8217;t work, because <code>&lt;formlet&gt;</code> isn&#8217;t a form.</p>
+          
+              
+          
+              
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def attrs='label, image, method' tag='formlet-submit'&gt;
+  &lt;% label ||= 'submit' %&gt;
+  &lt;if test='&amp;image'&gt;
+    &lt;input class='image-button formlet-submit-button' src='&amp;image' merge-attrs type='image'/&gt;
+  &lt;/if&gt;
+  &lt;else&gt;
+    &lt;input class='button formlet-submit-button' onClick='hjq.formlet.submit.call(this)' merge-attrs type='button' value='#{label}'/&gt;
+  &lt;/else&gt;
 &lt;/def&gt;</code></pre>
               </div>
           
