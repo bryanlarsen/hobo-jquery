@@ -45,7 +45,7 @@
 
 <p>Events are also supported. Pass in a global Javascript function name:</p>
 
-<pre><code>&lt;hjq-datepicker onSelect=&quot;hjq.log&quot; /&gt;</code></pre>
+<pre><code>&lt;hjq-datepicker onSelect=&quot;hjq.util.log&quot; /&gt;</code></pre>
           <ul>
             
               
@@ -458,23 +458,23 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
 
 <ul>
 <li>
-<p>minimum: the minimum number of items in the collection. Currently only &#8216;0&#8217; and &#8216;1&#8217; are supported values. The default is &#8216;0&#8217;.</p>
+<p><code>minimum</code>: the minimum number of items in the collection. Currently only &#8216;0&#8217; and &#8216;1&#8217; are supported values. The default is &#8216;0&#8217;.</p>
 </li>
 
 <li>
-<p>fields: passed down to the <code>field-list</code> tag in the default <code>item</code>.</p>
+<p><code>fields</code>: passed down to the <code>field-list</code> tag in the default <code>item</code>.</p>
 </li>
 
 <li>
-<p>template: the default values for new items. Normally this functionality is better provided by Model.new, but it&#8217;s here if you need it.</p>
+<p><code>template</code>: the default values for new items. Normally this functionality is better provided by Model.new, but it&#8217;s here if you need it.</p>
 </li>
 
 <li>
-<p>add-hook: a javascript function to call after an item has been added. The context will be set to the new item.</p>
+<p><code>add-hook</code>: a javascript function to call after an item has been added. The context will be set to the new item.</p>
 </li>
 
 <li>
-<p>remove-hook: a javascript function to call before an item is removed. The context will be set to the item. If the hook returns false, the remove is cancelled.</p>
+<p><code>remove-hook</code>: a javascript function to call before an item is removed. The context will be set to the item. If the hook returns false, the remove is cancelled.</p>
 </li>
 </ul>
 
@@ -589,31 +589,31 @@ end
 </li>
 
 <li>
-<p>standard Hobo AJAX attributes: (see http://cookbook.hobocentral.net/api<em>taglibs/rapid</em>forms)</p>
+<p>standard Hobo AJAX attributes: (see <a href='http://cookbook.hobocentral.net/api_taglibs/rapid_forms'>the cookbook</a> )</p>
 
 <ul>
 <li>
-<p>update: (optional). The DOM ID&#8217;s of parts to update. Note that you get an AJAX formlet whether this is provided or not.</p>
+<p><code>update</code>: (optional). The DOM ID&#8217;s of parts to update. Note that you get an AJAX formlet whether this is provided or not.</p>
 </li>
 
 <li>
-<p>message: the spinner message</p>
+<p><code>message</code>: the spinner message</p>
 </li>
 
 <li>
-<p>spinner<em>next</em>to: DOM id of an element to position the ajax progress spinner next to.</p>
+<p><code>spinner-next-to</code>: DOM id of an element to position the ajax progress spinner next to.</p>
 </li>
 
 <li>
-<p>before, success, error, complete: These callbacks are slightly different from the standard form callbacks. They are called with &#8220;this&#8221; set to the formlet. Also, you may pass in a function name rather than a javascript fragment. If the before callback returns false, it will cancel the submission.</p>
+<p><code>before</code>, <code>success</code>, <code>error</code>, <code>complete</code>: These callbacks are slightly different from the standard form callbacks. They are called with &#8220;this&#8221; set to the formlet. Also, you may pass in a function name rather than a javascript fragment. If the before callback returns false, it will cancel the submission.</p>
 </li>
 
 <li>
-<p>confirm: a message to be displayed in a JavaScript confirm dialog. By default there is no confirm dialog</p>
+<p><code>confirm</code>: a message to be displayed in a JavaScript confirm dialog. By default there is no confirm dialog</p>
 </li>
 
 <li>
-<p>not supported: type, script, form, params, confirm, reset-form, refocus-form, result-update. None of these are particularly hard to support. Email or post a message to the list if you need them.</p>
+<p>not supported: <code>type, script, params, reset-form, refocus-form, result-update</code>. None of these are particularly hard to support. Email or post a message to the list if you need them.</p>
 </li>
 </ul>
 </li>
@@ -623,27 +623,27 @@ end
 
 <ul>
 <li>
-<p>hidden-fields</p>
+<p><code>hidden-fields</code></p>
 </li>
 
 <li>
-<p>action</p>
+<p><code>action</code></p>
 </li>
 
 <li>
-<p>method</p>
+<p><code>method</code></p>
 </li>
 
 <li>
-<p>web-method</p>
+<p><code>web-method</code></p>
 </li>
 
 <li>
-<p>lifecycle</p>
+<p><code>lifecycle</code></p>
 </li>
 
 <li>
-<p>owner</p>
+<p><code>owner</code></p>
 </li>
 </ul>
 </li>
@@ -779,11 +779,11 @@ end
               
               <p>The JQuery UI <a href='http://jqueryui.com/demos/dialog/'>dialog</a>. All options and methods are supported.</p>
 
-<p>The default for <a href='http://jqueryui.com/demos/dialog/#option-autoOpen'>autoOpen</a> has been changed to &#8220;&false&#8221;. To display the dialog set autoOpen to &#8220;&true&#8221;, use a <code>&lt;hjq-dialog-open-button&gt;</code>, use the <a href='http://jqueryui.com/demos/dialog/#method-open'>jQuery dialog open method</a>, or use an <code>&lt;hjq-dialog-and-button&gt;</code> instead.</p>
+<p>The default for <a href='http://jqueryui.com/demos/dialog/#option-autoOpen'>autoOpen</a> has been changed to <code>&quot;&false&quot;</code>. To display the dialog set autoOpen to <code>&quot;&true&quot;</code>, use a <code>&lt;hjq-dialog-open-button&gt;</code>, use the <a href='http://jqueryui.com/demos/dialog/#method-open'>jQuery dialog open method</a>, or use an <code>&lt;hjq-dialog-and-button&gt;</code> instead.</p>
 
-<p>The default for <a href='http://jqueryui.com/demos/dialog/#option-position'>positon</a> is also set so that the dialog appears where it is defined.</p>
+<p>The default for <a href='http://jqueryui.com/demos/dialog/#option-position'>position</a> is also set so that the dialog appears where it is defined.</p>
 
-<p>The <a href='http://jqueryui.com/demos/dialog/#option-buttons'>positon</a> has been changed slightly. Instead of an Hash, it expects a list of pairs. (Unlike Javascript Objects, Ruby Hash&#8217;s do not preserve order). Because of quoting issues, it&#8217;s usually easier to assign the list to a variable and then include the list:</p>
+<p>The <a href='http://jqueryui.com/demos/dialog/#option-buttons'>buttons</a> option has been changed slightly. Instead of an Hash, it expects a list of pairs. (Unlike Javascript Objects, Ruby Hash&#8217;s do not preserve order). Because of quoting issues, it&#8217;s usually easier to assign the list to a variable and then include the list:</p>
 
 <pre><code>&lt;% buttons = [ [&quot;cancel&quot;, &quot;jQuery(this).dialog(&#39;close&#39;)&quot;] ] %&gt;
 &lt;hjq-dialog buttons=&quot;&buttons&quot; /&gt;</code></pre>
@@ -801,11 +801,11 @@ end
 <p>The following functions are predefined for use in dialog buttons:</p>
 
 <ul>
-<li>hjq.dialog.close: close the dialog box</li>
+<li><code>hjq.dialog.close</code>: close the dialog box</li>
 
-<li>hjq.dialog.submit_formlet: submits all formlets inside the dialog</li>
+<li><code>hjq.dialog.submit_formlet</code>: submits all formlets inside the dialog</li>
 
-<li>hjq.dialog.submit_formlet_and_close: Submits any enclosed formlets, then closes the dialog. Warning: hijacks the &#8220;success&#8221; formlet option.</li>
+<li><code>hjq.dialog.submit_formlet_and_close</code>: submits any enclosed formlets, then closes the dialog.</li>
 </ul>
           
               
@@ -866,9 +866,9 @@ end
               <h3 id='attributes'>Attributes</h3>
 
 <ul>
-<li>dialog (required):a CSS selector (AKA jQuery selector) to locate the dialog in the DOM. Remember, if you&#8217;re passing an ID, place a &#8217;#&#8217; in front of the ID.</li>
+<li><code>dialog</code> (required):a CSS selector (AKA jQuery selector) to locate the dialog in the DOM. Remember, if you&#8217;re passing an ID, place a &#8217;#&#8217; in front of the ID.</li>
 
-<li>all <code>&lt;button&gt;</code> attributes except for onclick</li>
+<li>supports all <code>&lt;button&gt;</code> attributes except for <code>onclick</code></li>
 </ul>
 
 <h3 id='example'>Example</h3>
@@ -915,7 +915,7 @@ end
               <h3 id='attributes'>Attributes</h3>
 
 <ul>
-<li>id (optional): the DOM id to use for the dialog</li>
+<li><code>id</code> (optional): the DOM id to use for the dialog</li>
 </ul>
 
               <div class="source">
@@ -936,7 +936,7 @@ end
               
               <p>Defines a <code>&lt;select-one&gt;</code> and a button that brings up an <code>&lt;hjq-dialog&gt;</code> containing a form allowing you to enter a new element</p>
 
-<p>Because the select-one is a part, it cannot be parameterized. However, you can adjust its definition by overriding the polymorphic input for the type:</p>
+<p>Because the select-one is a part, it cannot be parameterized. However, you can adjust its definition by defining the polymorphic input for the type:</p>
 
 <pre><code>&lt;def tag=&quot;input&quot; for=&quot;StoryStatus&quot;&gt;
   &lt;select-one include-none=&quot;&false&quot; /&gt;
