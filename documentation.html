@@ -138,6 +138,46 @@
   </li>
 
             
+              
+  <li>
+    <a href="#hjq-dialog-tag">
+      <span>
+        hjq-dialog
+      </span>
+    </a>
+  </li>
+
+            
+              
+  <li>
+    <a href="#hjq-dialog-open-button-tag">
+      <span>
+        hjq-dialog-open-button
+      </span>
+    </a>
+  </li>
+
+            
+              
+  <li>
+    <a href="#hjq-dialog-and-button-tag">
+      <span>
+        hjq-dialog-and-button
+      </span>
+    </a>
+  </li>
+
+            
+              
+  <li>
+    <a href="#select-one-or-new-dialog-tag">
+      <span>
+        select-one-or-new-dialog
+      </span>
+    </a>
+  </li>
+
+            
           </ul>
           
             <div id="annotate-tag-tag">
@@ -219,7 +259,6 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
   &lt;stylesheet name='smoothness/jquery-ui-1.7.custom.css'/&gt;
   &lt;javascript name='jquery-1.3.2.min.js'/&gt;
   &lt;javascript name='jquery-ui-1.7.custom.min.js'/&gt;
-  &lt;javascript name='jquery.form.js'/&gt;
 &lt;/def&gt;</code></pre>
               </div>
           
@@ -255,7 +294,7 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
           
               <h2>hjq-datepicker</h2>
               
-              <p>This is the <a href='http://docs.jquery.com/UI/Datepicker'>jQuery-UI datepicker</a>.</p>
+              <p>This is the <a href='http://docs.jquery.com/UI/Datepicker'>jQuery-UI datepicker</a>. All options and events are supported.</p>
 
 <p>It&#8217;s probably easiest to add this to your application.dryml:</p>
 
@@ -273,14 +312,14 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
 
               <div class="source">
                 <h3><a href="#">Source</a></h3>
-                <pre><code>&lt;def attrs='name, altField, altFormat, appendText, buttonImage, buttonImageOnly, buttonText, changeMonth, changeYear, closeText, constrainInput, currentText, dateFormat, dayNames, dayNamesMin, dayNamesShort, defaultDate, duration, firstDay, gotoCurrent, hideIfNoPrevNext, isRTL, maxDate, minDate, monthNames, monthNamesShort, navigationAsDateFormat, nextText, numberOfMonths, prevText, shortYearCutoff, showAnim, showButtonPanel, showCurrentAtPos, showMonthAfterYear, showOn, showOptions, showOtherMonths, stepMonths, yearRange, beforeShow, beforeShowDay, onChangeMonthYear, onClose, onSelect' tag='hjq-datepicker'&gt;
- &lt;% option_names=['altField', 'altFormat', 'appendText', 'buttonImage', 'buttonImageOnly', 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'stepMonths', 'yearRange'] %&gt;
- &lt;% event_names=['beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'] %&gt;
- &lt;% options = {}; option_names.each {|n| options[n]=all_attributes[n] if all_attributes.has_key?(n) }  %&gt;
- &lt;% events = {}; event_names.each {|n| events[n]=all_attributes[n] if all_attributes.has_key?(n) } %&gt;
+                <pre><code>&lt;def attrs='name' tag='hjq-datepicker'&gt;
+&lt;%
+  options, attrs = attributes.partition_hash(['altField', 'altFormat', 'appendText', 'buttonImage', 'buttonImageOnly', 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'stepMonths', 'yearRange'])
+  events, html_attrs = attrs.partition_hash(['beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'])
+%&gt;
  &lt;annotate-tag tag='hjq-datepicker' events='&amp;events' init='hjq.datepicker.init' options='&amp;options'/&gt;
- &lt;% add_classes!(attributes, &quot;hjq-annotated&quot;); %&gt;
- &lt;%= text_field_tag(name, this, attributes) %&gt;
+ &lt;% html_attrs = add_classes(html_attrs, &quot;hjq-annotated&quot;); %&gt;
+ &lt;%= text_field_tag(name, this, html_attrs) %&gt;
 &lt;/def&gt;</code></pre>
               </div>
           
@@ -628,7 +667,7 @@ end
              method.downcase
            end
 
-  ajax_options[:url] ||= begin
+  ajax_options[:url] = action || begin
      target = if owner
                 collection_name = this.class.reverse_reflection(owner).name
                 this.send(owner).send(collection_name)
@@ -729,6 +768,217 @@ end
   &lt;else&gt;
     &lt;input class='button formlet-submit-button' onClick='hjq.formlet.submit.call(this)' merge-attrs type='button' value='#{label}'/&gt;
   &lt;/else&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="hjq-dialog-tag">
+          
+              <h2>hjq-dialog</h2>
+              
+              <p>The JQuery UI <a href='http://jqueryui.com/demos/dialog/'>dialog</a>. All options and methods are supported.</p>
+
+<p>The default for <a href='http://jqueryui.com/demos/dialog/#option-autoOpen'>autoOpen</a> has been changed to &#8220;&false&#8221;. To display the dialog set autoOpen to &#8220;&true&#8221;, use a <code>&lt;hjq-dialog-open-button&gt;</code>, use the <a href='http://jqueryui.com/demos/dialog/#method-open'>jQuery dialog open method</a>, or use an <code>&lt;hjq-dialog-and-button&gt;</code> instead.</p>
+
+<p>The default for <a href='http://jqueryui.com/demos/dialog/#option-position'>positon</a> is also set so that the dialog appears where it is defined.</p>
+
+<p>The <a href='http://jqueryui.com/demos/dialog/#option-buttons'>positon</a> has been changed slightly. Instead of an Hash, it expects a list of pairs. (Unlike Javascript Objects, Ruby Hash&#8217;s do not preserve order). Because of quoting issues, it&#8217;s usually easier to assign the list to a variable and then include the list:</p>
+
+<pre><code>&lt;% buttons = [ [&quot;cancel&quot;, &quot;jQuery(this).dialog(&#39;close&#39;)&quot;] ] %&gt;
+&lt;hjq-dialog buttons=&quot;&buttons&quot; /&gt;</code></pre>
+
+<p>or</p>
+
+<pre><code>&lt;hjq-dialog id=&quot;story-dialog&quot; buttons=&#39;&{&quot;cancel&quot; =&gt; &quot;jQuery(this).dialog(\&quot;close\&quot;)&quot;}&#39; /&gt;</code></pre>
+
+<p>or</p>
+
+<pre><code>&lt;hjq-dialog id=&quot;story-dialog&quot; buttons=&#39;&{&quot;cancel&quot; =&gt; &quot;hjq.dialog.close&quot;}&#39; /&gt;</code></pre>
+
+<p>Because Ruby Hash&#8217;s do not preserve order, you may use a list of pairs instead of a Hash.</p>
+
+<p>The following functions are predefined for use in dialog buttons:</p>
+
+<ul>
+<li>hjq.dialog.close: close the dialog box</li>
+
+<li>hjq.dialog.submit<em>formlet: submits all formlets inside the dialog</em></li>
+
+<li>hjq.dialog.submit<em>formlet</em>and<em>close: Submits any enclosed formlets, then closes the dialog. Warning: hijacks the &#8220;success&#8221; formlet option. <em>/</em></em></li>
+</ul>
+          
+              
+                <h3>Parameters</h3>
+                
+  <ul>
+    
+      <li>default
+        
+  
+
+      </li>
+    
+  </ul>
+
+              
+          
+              
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def attrs='buttons' tag='hjq-dialog'&gt;
+&lt;% #FIXME: dry these names
+ options, attrs = attributes.partition_hash([&quot;autoOpen&quot;, &quot;bgiframe&quot;, &quot;closeOnEscape&quot;, &quot;dialogClass&quot;, &quot;draggable&quot;, &quot;height&quot;, &quot;hide&quot;, &quot;maxHeight&quot;, &quot;maxWidth&quot;, &quot;minWidth&quot;, &quot;modal&quot;, &quot;position&quot;, &quot;resizable&quot;, &quot;show&quot;, &quot;stack&quot;, &quot;title&quot;, &quot;width&quot;, &quot;zIndex&quot;])
+ events, html_attrs = attrs.partition_hash([&quot;beforeclose&quot;, &quot;open&quot;, &quot;focus&quot;, &quot;dragStart&quot;, &quot;drag&quot;, &quot;dragStop&quot;, &quot;resizeStart&quot;, &quot;resize&quot;, &quot;resizeStop&quot;, &quot;close&quot;])
+ options[&quot;autoOpen&quot;]=false unless options.has_key?(&quot;autoOpen&quot;)
+%&gt;
+ &lt;span class='hjq-dialog-position'/&gt;
+ &lt;annotate-tag buttons='&amp;buttons' tag='hjq-dialog' events='&amp;events' init='hjq.dialog.init' options='&amp;options'/&gt;
+ &lt;% html_attrs = add_classes(html_attrs, &quot;hjq-annotated hidden&quot;); %&gt;
+ &lt;div merge-attrs='&amp;html_attrs' param='default'/&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="hjq-dialog-open-button-tag">
+          
+              <h2>hjq-dialog-open-button</h2>
+              
+              <p>When pressed, will open a <code>&lt;hjq-dialog&gt;</code>.</p>
+          
+              
+                <h3>Parameters</h3>
+                
+  <ul>
+    
+      <li>default
+        
+  
+
+      </li>
+    
+  </ul>
+
+              
+          
+              <h3 id='attributes'>Attributes</h3>
+
+<ul>
+<li>dialog (required):a CSS selector (AKA jQuery selector) to locate the dialog in the DOM. Remember, if you&#8217;re passing an ID, place a &#8217;#&#8217; in front of the ID.</li>
+
+<li>all <code>&lt;button&gt;</code> attributes except for onclick</li>
+</ul>
+
+<h3 id='example'>Example</h3>
+
+<pre><code>&lt;hjq-dialog id=&quot;hello-dialog&quot;&gt;Hello!&lt;/hjq-dialog&gt;
+&lt;hjq-dialog-open-button dialog=&quot;#hello-dialog&quot;&gt;Press Me!&lt;/hjq-dialog-open-button&gt;</code></pre>
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def attrs='dialog' tag='hjq-dialog-open-button'&gt;
+  &lt;button merge class='hjq-dialog-open-button' param='default' onclick='hjq.dialog_opener.click(this, jQuery(&amp;apos;#{dialog}&amp;apos;)); return false;'/&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="hjq-dialog-and-button-tag">
+          
+              <h2>hjq-dialog-and-button</h2>
+              
+              <p>Defines an <code>&lt;hjq-dialog&gt;</code> and a <code>&lt;hjq-dialog-open-button&gt;</code> and links the two together.</p>
+          
+              
+                <h3>Parameters</h3>
+                
+  <ul>
+    
+      <li>hjq-dialog
+        
+  
+
+      </li>
+    
+      <li>hjq-dialog-open-button
+        
+  
+
+      </li>
+    
+  </ul>
+
+              
+          
+              <h3 id='attributes'>Attributes</h3>
+
+<ul>
+<li>id (optional): the DOM id to use for the dialog</li>
+</ul>
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def tag='hjq-dialog-and-button'&gt;
+  &lt;% # we can't use jQuery traversal functions since the dialog will move around in the DOM %&gt;
+  &lt;% attributes[&quot;id&quot;]=&quot;hjq-dialog-#{(rand*1000000000).to_i}&quot; unless attributes.has_key?(&quot;id&quot;) %&gt;
+  &lt;hjq-dialog merge param/&gt;
+  &lt;hjq-dialog-open-button param dialog='##{attributes[&amp;apos;id&amp;apos;]}'/&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="select-one-or-new-dialog-tag">
+          
+              <h2>select-one-or-new-dialog</h2>
+              
+              <p>Defines a <code>&lt;select-one&gt;</code> and a button that brings up an <code>&lt;hjq-dialog&gt;</code> containing a form allowing you to enter a new element</p>
+
+<p>Because the select-one is a part, it cannot be parameterized. However, you can adjust its definition by overriding the polymorphic input for the type:</p>
+
+<pre><code>&lt;def tag=&quot;input&quot; for=&quot;StoryStatus&quot;&gt;
+  &lt;select-one include-none=&quot;&false&quot; /&gt;
+&lt;/def&gt;</code></pre>
+          
+              
+                <h3>Parameters</h3>
+                
+  <ul>
+    
+      <li>hjq-dialog-open-button
+        
+  
+
+      </li>
+    
+      <li>hjq-dialog
+        
+  
+
+      </li>
+    
+  </ul>
+
+              
+          
+              
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def tag='select-one-or-new-dialog'&gt;
+  &lt;% dialog_id=&quot;hjq-dialog-#{typed_id.gsub(':', '-')}&quot; %&gt;
+  &lt;% part_id = &quot;select-one-#{typed_id.gsub(':', '-')}&quot; %&gt;
+  &lt;input id='&amp;part_id' part='select-one-or-new-dialog-select'/&gt;
+  &lt;hjq-dialog-open-button param dialog='##{dialog_id}'&gt;
+    New &lt;% this_field.humanize %&gt;
+  &lt;/hjq-dialog-open-button&gt;
+  &lt;hjq-dialog buttons='&amp;[[&quot;cancel&quot;, &quot;hjq.dialog.close&quot;], [&quot;ok&quot;, &quot;hjq.dialog.submit_formlet_and_close&quot;]]' title='New #{this_field.humanize}' param id='&amp;dialog_id'&gt;
+    &lt;formlet success='jQuery(&amp;apos;##{part_id} select&amp;apos;).val(jQuery(&amp;apos;##{part_id} option:last&amp;apos;).val())' update='&amp;part_id' with='&amp;this_type.new'&gt;
+      &lt;field-list/&gt;
+    &lt;/formlet&gt;
+  &lt;/hjq-dialog&gt;
 &lt;/def&gt;</code></pre>
               </div>
           
