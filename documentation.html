@@ -33,7 +33,7 @@
         <div class="taglib" id="hobo-jquery-taglib">
           <p>This is the jQuery plugin for Hobo. This plugin provides the jQuery UI widgets in a Hobo friendly manner, provides useful tags and functions for jQuery javascript coding, and provides additional composite tags.</p>
 
-<p>To use, see the <a href='README.html'>installation instructions</a></p>
+<p>To use, see the <a href='http://cookbook.hobocentral.net/plugins/hobo-jquery'>installation instructions</a> <a href='README.html'>(alternate link)</a></p>
 
 <p>The jQuery UI tags support all of the <a href='http://docs.jquery.com/UI'>options that the corresponding jQuery UI widgets provide</a>. For example:</p>
 
@@ -331,35 +331,15 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
               
               <p>Creates a sub-section of the form which the user can repeat using (+) and (-) buttons, in order to allow an entire <code>has_many</code> collection to be created/edited in a single form.</p>
 
-<p>This tag is similar to the standard Hobo <code>&lt;input-many&gt;</code> tag, but it includes several additional features.</p>
+<p>Most of the enhancements from hjq-input-many have been folded back into hjq-input-many, but there are a few remaining differences:</p>
 
 <ul>
-<li>it supports 0 length associations</li>
-
 <li>it supports delayed initialization, required for some Javascript elements like the jQuery UI datepicker</li>
 
-<li>it allows the (+) and (-) buttons to be customized</li>
+<li>the name of the main parameter is <code>item</code> rather than <code>default</code></li>
 
-<li>it provides a default for the <code>item</code> parameter</li>
-
-<li>it copies from a template rather than cloning the current item and clearing it</li>
-
-<li>the template may be overridden</li>
-
-<li>javascript hooks for (+) and (-)</li>
+<li>hjq-input-many allows you to provide javascript callbacks. input-many fires rapid:add, rapid:change and rapid:remove events that can be hooked.</li>
 </ul>
-
-<p>It also fixes the following buglets in input-many:</p>
-
-<ul>
-<li>id&#8217;s of textareas and selects and other non-input&#8217;s are adjusted properly</li>
-
-<li>classdata for inner elements updated</li>
-
-<li>the original input-many didn&#8217;t clear textareas and select&#8217;s. We don&#8217;t have a clear -&gt; no buglet! :)</li>
-</ul>
-
-<p>Because this implementation contains more than one parameter, the default parameter from input-many has been renamed to <code>item</code>.</p>
           
               
                 <h3>Parameters</h3>
@@ -480,7 +460,7 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
 
               <div class="source">
                 <h3><a href="#">Source</a></h3>
-                <pre><code>&lt;def attrs='minimum, fields, new-template, remove-hook' polymorphic tag='hjq-input-many'&gt;
+                <pre><code>&lt;def attrs='minimum, fields, template, add-hook, remove-hook' polymorphic tag='hjq-input-many'&gt;
 &lt;%
 # helper function to create id's on buttons to facilitate testing
 def underize(s)
@@ -506,7 +486,9 @@ end
       &lt;input name='#{param_name_for_this}' class='empty-input' id='#{param_name_for_this}' type='hidden' value='' disabled='&amp;(!this.empty? || minimum&gt;0)'/&gt;
       &lt;fake-field-context fake-field='-1' context='&amp;template'&gt;
         &lt;div param='empty-message'&gt;
-          No &lt;%= this.class.class_name.humanize.downcase.pluralize %&gt;.
+          &lt;ht key='#{this.class.class_name.tableize}.collection.empty_message'&gt;          
+            No &lt;%= this.class.class_name.titleize.downcase.pluralize %&gt;.
+          &lt;/ht&gt;
         &lt;/div&gt;
         &lt;div class='buttons'&gt;
           &lt;button class='hidden' param='remove-item' id='#{underize param_name_for_this}_remove'&gt;-&lt;/button&gt;
@@ -577,7 +559,7 @@ end
           
               <h2>formlet</h2>
               
-              <p><code>&lt;formlet&gt;</code> works like an AJAX <code>&lt;form&gt;</code> without actually being an AJAX <code>&lt;form&gt;</code>. This is usefully in scenarios where forms aren&#8217;t allowed or are problematic, like inside of another form.</p>
+              <p><code>&lt;formlet&gt;</code> works like an AJAX <code>&lt;form&gt;</code> without actually being an AJAX <code>&lt;form&gt;</code>. This is useful in scenarios where forms aren&#8217;t allowed or are problematic, like inside of another form.</p>
           
               
           
@@ -835,7 +817,7 @@ end
 %&gt;
  &lt;span class='hjq-dialog-position'/&gt;
  &lt;annotate-tag buttons='&amp;buttons' tag='hjq-dialog' events='&amp;events' init='hjq.dialog.init' options='&amp;options'/&gt;
- &lt;% html_attrs = add_classes(html_attrs, &quot;hjq-annotated hidden&quot;); %&gt;
+ &lt;% html_attrs = add_classes(html_attrs, &quot;hjq-annotated hidden hjq-dialog&quot;); %&gt;
  &lt;div merge-attrs='&amp;html_attrs' param='default'/&gt;
 &lt;/def&gt;</code></pre>
               </div>
@@ -934,7 +916,7 @@ end
           
               <h2>select-one-or-new-dialog</h2>
               
-              <p>Defines a <code>&lt;select-one&gt;</code> and a button that brings up an <code>&lt;hjq-dialog&gt;</code> containing a form allowing you to enter a new element</p>
+              <p>Defines a <code>&lt;select-one&gt;</code> and a button that brings up an <code>&lt;hjq-dialog&gt;</code> containing a form allowing you to enter a new item. After the form is filled in and closed, the <code>&lt;select-one&gt;</code> is changed to select the new item.</p>
 
 <p>Because the select-one is a part, it cannot be parameterized. However, you can adjust its definition by defining the polymorphic input for the type:</p>
 
