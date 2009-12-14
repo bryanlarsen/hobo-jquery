@@ -22,7 +22,7 @@
 <pre><code>rake hobo_jquery:link_jquery
 rake hobo_jquery:link_assets</code></pre>
 
-<p>If you&#8217;re on Windows, you can use the update_jquery and update_assets tasks instead.</p>
+<p>If you&#8217;re on Windows, you can use the install_jquery and update_assets tasks instead.</p>
 
 <p>To use, you need to include hobo-jquery and add the assets to your page. In your application.dryml:</p>
 
@@ -40,7 +40,13 @@ rake hobo_jquery:link_assets</code></pre>
 
 <pre><code>git submodule update --init</code></pre>
 
+<h2 id='notes'>Notes</h2>
+
+<p>Hobo Jquery calls <a href='http://docs.jquery.com/Core/jQuery.noConflict'>jQuery.noConflict()</a> to avoid conflicts with prototype. <code>$</code> is still bound to prototype.js. To use jQuery, use <code>jQuery</code> instead of <code>$</code>.</p>
+
 <h2 id='documentation'>Documentation</h2>
 
-<p><a href='http://bryanlarsen.github.com/hobo-jquery/documentation.html'>Auto generated documentation</a>.</p>
+<p><a href='http://bryanlarsen.github.com/hobo-jquery/documentation.html'>Auto generated documentation on GitHub</a>.</p>
+
+<p><a href='http://http://cookbook.hobocentral.net/api_taglibs/hobo-jquery'>Auto generated documentation on HoboCentral</a>.</p>
 </body></html>
