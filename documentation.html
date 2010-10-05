@@ -1,10 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    
+
+
+
+  
+
+<html>
   <head>
-    <link href="stylesheets/themes/smoothness/ui.all.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="javascripts/jquery-1.3.2.min.js"></script>
-    <script type="text/javascript" src="javascripts/jquery-ui-1.7.custom.min.js"></script>
+    <link href="stylesheets/themes/smoothness/ui.all.css" rel="stylesheet" type="text/css"></link>
+    <script type="text/javascript" src="javascripts/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="javascripts/jquery-ui-1.8.4.custom.min.js"></script>
     <script type="text/javascript">
       jQuery(document).ready(function(){
         jQuery("#tabs-top").tabs();
@@ -28,7 +31,6 @@
 
         
       </ul>
-      <!-- unfortunately, <repeat> is problematic here -->
       
         <div class="taglib" id="hobo-jquery-taglib">
           <p>This is the jQuery plugin for Hobo. This plugin provides the jQuery UI widgets in a Hobo friendly manner, provides useful tags and functions for jQuery javascript coding, and provides additional composite tags.</p>
@@ -93,6 +95,16 @@
     <a href="#hjq-datepicker-tag">
       <span>
         hjq-datepicker
+      </span>
+    </a>
+  </li>
+
+            
+              
+  <li>
+    <a href="#hjq-autocomplete-tag">
+      <span>
+        hjq-autocomplete
       </span>
     </a>
   </li>
@@ -256,9 +268,9 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
               <div class="source">
                 <h3><a href="#">Source</a></h3>
                 <pre><code>&lt;def tag='jquery-assets'&gt;
-  &lt;stylesheet name='smoothness/jquery-ui-1.7.custom.css'/&gt;
-  &lt;javascript name='jquery-1.3.2.min.js'/&gt;
-  &lt;javascript name='jquery-ui-1.7.custom.min.js'/&gt;
+  &lt;stylesheet name='smoothness/jquery-ui-1.8.4.custom.css'/&gt;
+  &lt;javascript name='jquery-1.4.2.min.js'/&gt;
+  &lt;javascript name='jquery-ui-1.8.4.custom.min.js'/&gt;
 &lt;/def&gt;</code></pre>
               </div>
           
@@ -314,10 +326,58 @@ jQuery(this).find(&#39;.hjq-annotated&#39;).each(function() {
                 <h3><a href="#">Source</a></h3>
                 <pre><code>&lt;def attrs='name' tag='hjq-datepicker'&gt;
 &lt;%
-  options, attrs = attributes.partition_hash(['altField', 'altFormat', 'appendText', 'buttonImage', 'buttonImageOnly', 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'stepMonths', 'yearRange'])
+  options, attrs = attributes.partition_hash(['altField', 'altFormat', 'appendText', 'buttonImage', 'buttonImageOnly', 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths','shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'stepMonths', 'yearRange'])
   events, html_attrs = attrs.partition_hash(['beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'])
 %&gt;
  &lt;annotate-tag tag='hjq-datepicker' events='&amp;events' init='hjq.datepicker.init' options='&amp;options'/&gt;
+ &lt;% html_attrs = add_classes(html_attrs, &quot;hjq-annotated&quot;); %&gt;
+ &lt;%= text_field_tag(name, this, html_attrs) %&gt;
+&lt;/def&gt;</code></pre>
+              </div>
+          
+            </div>
+          
+            <div id="hjq-autocomplete-tag">
+          
+              <h2>hjq-autocomplete</h2>
+              
+              <p>This is the <a href='http://jqueryui.com/demos/autocomplete/'>jQuery-UI autocompleter</a>. All options and events provided by the jQuery autocompleter are supported in this Hobo tag. Refer to the jquery autocomplete documentation for more details.</p>
+
+<p>This tag works very similarly to the <code>name-one</code> tag used in Hobo. The main reason I use <code>hjq-autocomplete</code> is that the scriptaculous widget used by Hobo for <code>name-one</code> does not work well in Internet Explorer: https://prototype.lighthouseapp.com/projects/8887/tickets/33</p>
+
+<p>If you do not provide a <code>source</code> option, this tag will essentially provide a default similar to this:</p>
+
+<pre><code>&lt;hjq-autocomplete:project source=&quot;&Project.find(:all, :limit =&gt; 5000).map {|p| p.name}&quot; /&gt;</code></pre>
+
+<p>This will provide a local autocomplete, putting all possible options into your HTML. This is useful when you have too many options to make a <code>select-one</code> infeasible, but will overload your server and crash your browser if you have millions of options.</p>
+
+<p>To do a server side autocomplete, use a path for your source option:</p>
+
+<pre><code>&lt;hjq-autocomplete:project source=&quot;&query_projects_path&quot; delay=&quot;500&quot; minLength=&quot;3&quot; /&gt;</code></pre>
+
+<p>And add something like this to your controller:</p>
+
+<pre><code>index_action :query do
+  render :json =&gt; Project.name_contains(params[:term]).limit(100).*.name
+end</code></pre>
+          
+              
+          
+              
+
+              <div class="source">
+                <h3><a href="#">Source</a></h3>
+                <pre><code>&lt;def attrs='name' tag='hjq-autocomplete'&gt;
+&lt;%
+  options, attrs = attributes.partition_hash(['disabled', 'delay', 'minLength', 'source'])
+  events, html_attrs = attrs.partition_hash(['search', 'open', 'focus', 'select', 'close', 'change'])
+  options[&quot;source&quot;] ||= begin
+                          complete_target = this_field_reflection.klass
+                          complete_target.find(:all, :limit =&gt; 5000).*.send(complete_target.name_attribute)
+                        end
+
+%&gt;
+ &lt;annotate-tag tag='hjq-autocomplete' events='&amp;events' init='hjq.autocomplete.init' options='&amp;options'/&gt;
  &lt;% html_attrs = add_classes(html_attrs, &quot;hjq-annotated&quot;); %&gt;
  &lt;%= text_field_tag(name, this, html_attrs) %&gt;
 &lt;/def&gt;</code></pre>
@@ -637,6 +697,9 @@ end
 &lt;%
 #FIXME: code very similar to &lt;form&gt;.  refactor out common code.
 
+  # be compatible with both Hobo 1.0 and 1.1
+  dryml = Hobo.const_defined?(:Dryml) ? Hobo::Dryml : Dryml
+
   ajax_attrs, html_attrs = attributes.partition_hash(Hobo::RapidHelper::AJAX_ATTRS)
 
   ajax_options = {}
@@ -663,7 +726,7 @@ end
   if action.nil? &amp;&amp; (ajax_options[:url].nil? ||
                      (lifecycle.nil? &amp;&amp; new_record &amp;&amp; !this.creatable_by?(current_user)) ||
                      (lifecycle.nil? &amp;&amp; !new_record &amp;&amp; !can_edit?))
-    Hobo::Dryml.last_if = false
+    dryml.last_if = false
     logger.info(&quot;blank!!!&quot;)
     &quot;&quot;
   else
@@ -701,7 +764,7 @@ end
       page_path = if (request.post? || request.put?) &amp;&amp; params[:page_path]
                     params[:page_path]
                   else
-                    view_name.sub(Hobo::Dryml::EMPTY_PAGE, params[:action])
+                    view_name.sub(dryml::EMPTY_PAGE, params[:action])
                   end
       page_path_hidden = hidden_field_tag(&quot;page_path&quot;, page_path) 
     end
@@ -718,7 +781,7 @@ end
       end
     end
 
-    Hobo::Dryml.last_if = true
+    dryml.last_if = true
   end
 
   add_classes!(html_attrs, &quot;formlet&quot;)
@@ -970,5 +1033,4 @@ end
       
     </div>
   </body>
-
-  </html>
+</html>
